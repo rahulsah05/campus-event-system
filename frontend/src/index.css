@@ -377,13 +377,13 @@ body {
   overflow: hidden;
 }
 
-.student-table {
+.event-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
 }
 
-.student-table th {
+.event-table th {
   background: #f8fafc;
   padding: 0.875rem 1.25rem;
   font-size: 0.75rem;
@@ -394,18 +394,18 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-.student-table td {
+.event-table td {
   padding: 1rem 1.25rem;
   font-size: 0.9rem;
   border-bottom: 1px solid #f1f5f9;
   vertical-align: middle;
 }
 
-.student-table tbody tr:hover {
+.event-table tbody tr:hover {
   background: #f8fafc;
 }
 
-.student-id-badge {
+.event-id-badge {
   font-family: var(--font-mono);
   font-weight: 600;
   font-size: 0.8rem;

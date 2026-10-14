@@ -1,5 +1,5 @@
 {
-  "name": "student-management-frontend",
+  "name": "campus-event-frontend",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -11,8 +11,7 @@
   "dependencies": {
     "lucide-react": "^0.475.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "student-information-management-system": "file:.."
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",

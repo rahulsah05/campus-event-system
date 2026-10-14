@@ -1,7 +1,7 @@
 {
-  "name": "student-management-backend",
+  "name": "campus-event-backend",
   "version": "1.0.0",
-  "description": "Backend API for Student Information Management System",
+  "description": "Backend API for the Campus Event and Workshop Management System",
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
@@ -13,7 +13,6 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mongoose": "^8.9.5",
-    "morgan": "^1.10.0",
-    "student-information-management-system": "file:.."
+    "morgan": "^1.10.0"
   }
 }

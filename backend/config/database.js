@@ -9,7 +9,7 @@ const connectDB = async () => {
     }
 
     const conn = await mongoose.connect(mongoURI, {
-      dbName: process.env.DB_NAME || 'studentDB'
+      dbName: process.env.DB_NAME || 'campusEventDB'
     });
 
     console.log(`MongoDB Connected: ${conn.connection.host} (Database: ${conn.connection.name})`);

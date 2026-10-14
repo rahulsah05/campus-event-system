@@ -1,7 +1,7 @@
 {
-  "name": "student-information-management-system",
+  "name": "campus-event-system",
   "version": "1.0.0",
-  "description": "Three-Tier Cloud Architecture: Netlify + Render + MongoDB Atlas",
+  "description": "Campus Event and Workshop Management System. Three-tier cloud architecture: Netlify + Render + MongoDB Atlas",
   "scripts": {
     "install:backend": "npm install --prefix backend",
     "install:frontend": "npm install --prefix frontend",

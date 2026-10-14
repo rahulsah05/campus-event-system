@@ -54,7 +54,7 @@ export default function EventTable({ events, loading, onEdit, onDelete }) {
   return (
     <div className="table-container">
       <div style={{ overflowX: 'auto' }}>
-        <table className="student-table event-table">
+        <table className="event-table">
           <thead>
             <tr>
               <th>Event ID</th>
@@ -72,7 +72,7 @@ export default function EventTable({ events, loading, onEdit, onDelete }) {
             {events.map((event) => (
               <tr key={event._id || event.eventId}>
                 <td>
-                  <span className="student-id-badge">{event.eventId}</span>
+                  <span className="event-id-badge">{event.eventId}</span>
                 </td>
                 <td style={{ fontWeight: 600, color: '#0f172a' }}>{event.title}</td>
                 <td>{event.category}</td>
