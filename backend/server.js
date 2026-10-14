@@ -4,7 +4,7 @@ const morgan = require('morgan');
 require('dotenv').config();
 
 const connectDB = require('./config/database');
-const studentRoutes = require('./routes/studentRoutes');
+const eventRoutes = require('./routes/eventRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -61,7 +61,7 @@ if (process.env.NODE_ENV !== 'test') {
 app.get('/', (req, res) => {
   res.status(200).json({
     status: 'healthy',
-    message: 'Student Information Management System API is running',
+    message: 'Campus Event and Workshop Management System API is running',
     version: '1.0.0',
     timestamp: new Date().toISOString()
   });
@@ -76,7 +76,7 @@ app.get('/health', (req, res) => {
 });
 
 // API Routes
-app.use('/api/students', studentRoutes);
+app.use('/api/events', eventRoutes);
 
 // 404 Route Handler
 app.use((req, res) => {

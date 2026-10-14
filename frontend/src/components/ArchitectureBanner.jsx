@@ -1,13 +1,12 @@
 import React from 'react';
-import { Globe, Server, Database, CheckCircle2, AlertCircle } from 'lucide-react';
-import { studentAPI } from '../services/api';
+import { Globe, Server, Database } from 'lucide-react';
+import { eventAPI } from '../services/api';
 
 export default function ArchitectureBanner({ backendHealthy, checkingHealth }) {
-  const apiUrl = studentAPI.getBaseUrl();
+  const apiUrl = eventAPI.getBaseUrl();
 
   return (
     <div className="tiers-banner">
-      {/* Tier 1: Netlify */}
       <div className="tier-card">
         <div className="tier-icon-wrap tier-netlify">
           <Globe size={22} />
@@ -21,7 +20,6 @@ export default function ArchitectureBanner({ backendHealthy, checkingHealth }) {
         </div>
       </div>
 
-      {/* Tier 2: Render */}
       <div className="tier-card">
         <div className="tier-icon-wrap tier-render">
           <Server size={22} />
@@ -41,7 +39,6 @@ export default function ArchitectureBanner({ backendHealthy, checkingHealth }) {
         </div>
       </div>
 
-      {/* Tier 3: MongoDB Atlas */}
       <div className="tier-card">
         <div className="tier-icon-wrap tier-mongo">
           <Database size={22} />
@@ -55,7 +52,7 @@ export default function ArchitectureBanner({ backendHealthy, checkingHealth }) {
               title={backendHealthy ? 'Database connected via Backend' : 'Waiting for connection'}
             ></span>
           </div>
-          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>studentDB &rarr; students</span>
+          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>events collection</span>
         </div>
       </div>
     </div>

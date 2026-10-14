@@ -34,7 +34,7 @@ async function request(endpoint, options = {}) {
   }
 }
 
-export const studentAPI = {
+export const eventAPI = {
   getBaseUrl: () => API_BASE_URL,
 
   checkHealth: async () => {
@@ -44,36 +44,36 @@ export const studentAPI = {
   getAll: async (params = {}) => {
     const query = new URLSearchParams();
     if (params.search) query.append('search', params.search);
-    if (params.department) query.append('department', params.department);
+    if (params.category) query.append('category', params.category);
     const qs = query.toString() ? `?${query.toString()}` : '';
-    return request(`/api/students${qs}`);
+    return request(`/api/events${qs}`);
   },
 
   getById: async (id) => {
-    return request(`/api/students/${encodeURIComponent(id)}`);
+    return request(`/api/events/${encodeURIComponent(id)}`);
   },
 
-  create: async (studentData) => {
-    return request('/api/students', {
+  create: async (eventData) => {
+    return request('/api/events', {
       method: 'POST',
-      body: JSON.stringify(studentData)
+      body: JSON.stringify(eventData)
     });
   },
 
-  update: async (id, studentData) => {
-    return request(`/api/students/${encodeURIComponent(id)}`, {
+  update: async (id, eventData) => {
+    return request(`/api/events/${encodeURIComponent(id)}`, {
       method: 'PUT',
-      body: JSON.stringify(studentData)
+      body: JSON.stringify(eventData)
     });
   },
 
   delete: async (id) => {
-    return request(`/api/students/${encodeURIComponent(id)}`, {
+    return request(`/api/events/${encodeURIComponent(id)}`, {
       method: 'DELETE'
     });
   },
 
   getStats: async () => {
-    return request('/api/students/stats/summary');
+    return request('/api/events/stats/summary');
   }
 };

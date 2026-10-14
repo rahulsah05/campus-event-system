@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { AlertTriangle, Trash2 } from 'lucide-react';
 
-export default function DeleteModal({ isOpen, onClose, onConfirm, student }) {
+export default function DeleteModal({ isOpen, onClose, onConfirm, event }) {
   const [deleting, setDeleting] = useState(false);
 
-  if (!isOpen || !student) return null;
+  if (!isOpen || !event) return null;
 
   const handleDelete = async () => {
     try {
       setDeleting(true);
-      await onConfirm(student.studentId);
+      await onConfirm(event.eventId);
       onClose();
     } catch (err) {
       console.error(err);
@@ -39,11 +39,11 @@ export default function DeleteModal({ isOpen, onClose, onConfirm, student }) {
           </div>
 
           <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.5rem' }}>
-            Delete Student Record?
+            Delete Event Record?
           </h3>
           <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-            Are you sure you want to delete student{' '}
-            <strong style={{ color: '#0f172a' }}>{student.name}</strong> (ID: {student.studentId})?
+            Are you sure you want to delete event{' '}
+            <strong style={{ color: '#0f172a' }}>{event.title}</strong> (ID: {event.eventId})?
             This will permanently remove the record from MongoDB Atlas.
           </p>
 
@@ -56,7 +56,7 @@ export default function DeleteModal({ isOpen, onClose, onConfirm, student }) {
                 'Deleting...'
               ) : (
                 <>
-                  <Trash2 size={16} /> Delete Student
+                  <Trash2 size={16} /> Delete Event
                 </>
               )}
             </button>

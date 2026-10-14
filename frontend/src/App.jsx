@@ -1,31 +1,38 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Search, UserPlus, Filter, RefreshCw } from 'lucide-react';
+import { Search, CalendarPlus } from 'lucide-react';
 import Header from './components/Header';
 import ArchitectureBanner from './components/ArchitectureBanner';
-import StudentStats from './components/StudentStats';
-import StudentTable from './components/StudentTable';
-import StudentModal from './components/StudentModal';
+import EventStats from './components/EventStats';
+import EventTable from './components/EventTable';
+import EventModal from './components/EventModal';
 import DeleteModal from './components/DeleteModal';
 import Toast from './components/Toast';
-import { studentAPI } from './services/api';
+import { eventAPI } from './services/api';
+
+const CATEGORIES = ['Workshop', 'Hackathon', 'Seminar', 'Competition', 'Cultural'];
+
+const EMPTY_STATS = {
+  totalEvents: 0,
+  upcoming: 0,
+  ongoing: 0,
+  completed: 0
+};
 
 export default function App() {
-  const [students, setStudents] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [stats, setStats] = useState(EMPTY_STATS);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDept, setSelectedDept] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
 
-  // Modals state
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [studentToEdit, setStudentToEdit] = useState(null);
-  const [studentToDelete, setStudentToDelete] = useState(null);
+  const [eventToEdit, setEventToEdit] = useState(null);
+  const [eventToDelete, setEventToDelete] = useState(null);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-  // Backend Health check
   const [backendHealthy, setBackendHealthy] = useState(false);
   const [checkingHealth, setCheckingHealth] = useState(true);
 
-  // Toasts
   const [toasts, setToasts] = useState([]);
 
   const addToast = (message, type = 'success') => {
@@ -40,12 +47,11 @@ export default function App() {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
-  // Check backend health
   const checkHealth = useCallback(async () => {
     setCheckingHealth(true);
     try {
-      await studentAPI.checkHealth();
-      setBackendHealthy(true);
+      const health = await eventAPI.checkHealth();
+      setBackendHealthy(health?.database === 'connected' || health?.status === 'UP');
     } catch (err) {
       setBackendHealthy(false);
     } finally {
@@ -53,93 +59,102 @@ export default function App() {
     }
   }, []);
 
-  // Fetch student list
-  const fetchStudents = useCallback(async () => {
+  const fetchStats = useCallback(async () => {
+    try {
+      const res = await eventAPI.getStats();
+      if (res && res.data) {
+        setStats({
+          totalEvents: res.data.totalEvents || 0,
+          upcoming: res.data.upcoming || 0,
+          ongoing: res.data.ongoing || 0,
+          completed: res.data.completed || 0
+        });
+      }
+    } catch (err) {
+      console.error('Stats error:', err);
+    }
+  }, []);
+
+  const fetchEvents = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await studentAPI.getAll({
+      const res = await eventAPI.getAll({
         search: searchTerm,
-        department: selectedDept
+        category: selectedCategory
       });
       if (res && res.data) {
-        setStudents(res.data);
+        setEvents(res.data);
         setBackendHealthy(true);
       }
     } catch (err) {
       console.error('Fetch error:', err);
       setBackendHealthy(false);
-      addToast(err.message || 'Failed to fetch students from backend', 'error');
+      addToast(err.message || 'Failed to fetch events from backend', 'error');
     } finally {
       setLoading(false);
     }
-  }, [searchTerm, selectedDept]);
+  }, [searchTerm, selectedCategory]);
 
-  // Initial load
   useEffect(() => {
     checkHealth();
-  }, [checkHealth]);
+    fetchStats();
+  }, [checkHealth, fetchStats]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      fetchStudents();
+      fetchEvents();
     }, 250);
     return () => clearTimeout(timeout);
-  }, [fetchStudents]);
+  }, [fetchEvents]);
 
-  // Handler: Add or Edit Student
-  const handleSaveStudent = async (studentData, isEditing) => {
+  const handleSaveEvent = async (eventData, isEditing) => {
     if (isEditing) {
-      await studentAPI.update(studentData.studentId, studentData);
-      addToast(`Student '${studentData.studentId}' updated successfully!`, 'success');
+      await eventAPI.update(eventData.eventId, eventData);
+      addToast(`Event '${eventData.eventId}' updated successfully!`, 'success');
     } else {
-      await studentAPI.create(studentData);
-      addToast(`Student '${studentData.studentId}' added successfully!`, 'success');
+      await eventAPI.create(eventData);
+      addToast(`Event '${eventData.eventId}' added successfully!`, 'success');
     }
-    await fetchStudents();
+    await Promise.all([fetchEvents(), fetchStats()]);
   };
 
-  // Handler: Open edit modal
-  const handleEditClick = (student) => {
-    setStudentToEdit(student);
+  const handleEditClick = (event) => {
+    setEventToEdit(event);
     setIsModalOpen(true);
   };
 
-  // Handler: Open delete modal
-  const handleDeleteClick = (student) => {
-    setStudentToDelete(student);
+  const handleDeleteClick = (event) => {
+    setEventToDelete(event);
     setIsDeleteOpen(true);
   };
 
-  // Handler: Confirm delete
-  const handleConfirmDelete = async (studentId) => {
+  const handleConfirmDelete = async (eventId) => {
     try {
-      await studentAPI.delete(studentId);
-      addToast(`Student '${studentId}' deleted successfully.`, 'success');
-      await fetchStudents();
+      await eventAPI.delete(eventId);
+      addToast(`Event '${eventId}' deleted successfully.`, 'success');
+      await Promise.all([fetchEvents(), fetchStats()]);
     } catch (err) {
-      addToast(err.message || 'Failed to delete student', 'error');
+      addToast(err.message || 'Failed to delete event', 'error');
       throw err;
     }
   };
 
-  // Get department list for filter
-  const departments = Array.from(new Set(students.map((s) => s.department).filter(Boolean)));
+  const handleRefresh = async () => {
+    await Promise.all([fetchEvents(), fetchStats(), checkHealth()]);
+  };
 
   return (
     <div className="app-container">
-      <Header onRefresh={fetchStudents} loading={loading} />
+      <Header onRefresh={handleRefresh} loading={loading} />
 
       <main className="main-content">
-        {/* Architecture Status Banner */}
         <ArchitectureBanner
           backendHealthy={backendHealthy}
           checkingHealth={checkingHealth}
         />
 
-        {/* High-level Statistics */}
-        <StudentStats students={students} />
+        <EventStats stats={stats} />
 
-        {/* Action & Search Bar */}
         <div className="action-bar">
           <div className="search-group">
             <div className="search-input-wrapper">
@@ -147,77 +162,70 @@ export default function App() {
               <input
                 type="text"
                 className="search-input"
-                placeholder="Search by ID, name, email, department..."
+                placeholder="Search by ID, title, venue, organizer..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
 
-            {departments.length > 0 && (
-              <select
-                className="filter-select"
-                value={selectedDept}
-                onChange={(e) => setSelectedDept(e.target.value)}
-              >
-                <option value="">All Departments</option>
-                {departments.map((dept) => (
-                  <option key={dept} value={dept}>
-                    {dept}
-                  </option>
-                ))}
-              </select>
-            )}
+            <select
+              className="filter-select"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
+              <option value="">All Categories</option>
+              {CATEGORIES.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
           </div>
 
           <button
             className="btn btn-primary"
             onClick={() => {
-              setStudentToEdit(null);
+              setEventToEdit(null);
               setIsModalOpen(true);
             }}
           >
-            <UserPlus size={18} /> Add Student
+            <CalendarPlus size={18} /> Add Event
           </button>
         </div>
 
-        {/* Student Records Table */}
-        <StudentTable
-          students={students}
+        <EventTable
+          events={events}
           loading={loading}
           onEdit={handleEditClick}
           onDelete={handleDeleteClick}
         />
       </main>
 
-      {/* Add / Edit Student Modal */}
-      <StudentModal
+      <EventModal
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
-          setStudentToEdit(null);
+          setEventToEdit(null);
         }}
-        onSave={handleSaveStudent}
-        studentToEdit={studentToEdit}
+        onSave={handleSaveEvent}
+        eventToEdit={eventToEdit}
       />
 
-      {/* Delete Confirmation Modal */}
       <DeleteModal
         isOpen={isDeleteOpen}
         onClose={() => {
           setIsDeleteOpen(false);
-          setStudentToDelete(null);
+          setEventToDelete(null);
         }}
         onConfirm={handleConfirmDelete}
-        student={studentToDelete}
+        event={eventToDelete}
       />
 
-      {/* Toast Feedback Messages */}
       <Toast toasts={toasts} onDismiss={removeToast} />
 
-      {/* Footer */}
       <footer className="app-footer">
         <p>
-          Student Information Management System &bull; Three-Tier Cloud Architecture
+          Campus Event and Workshop Management System &bull; Three-Tier Cloud Architecture
         </p>
         <div className="footer-tags">
           <span className="footer-tag">Netlify (Presentation)</span>

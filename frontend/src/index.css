@@ -417,7 +417,8 @@ body {
   border: 1px solid #cbd5e1;
 }
 
-.semester-badge {
+.semester-badge,
+.status-badge {
   background: #e0e7ff;
   color: #3730a3;
   font-weight: 600;
@@ -425,6 +426,26 @@ body {
   padding: 0.2rem 0.6rem;
   border-radius: 9999px;
   display: inline-block;
+}
+
+.status-upcoming {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.status-ongoing {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.status-completed {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-cancelled {
+  background: #fee2e2;
+  color: #b91c1c;
 }
 
 .table-actions {
@@ -648,4 +669,20 @@ body {
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.col-span-2 {
+    grid-column: span 1;
+  }
+
+  .search-group {
+    max-width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
