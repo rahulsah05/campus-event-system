@@ -148,13 +148,39 @@ export default function App() {
       <Header onRefresh={handleRefresh} loading={loading} />
 
       <main className="main-content">
-        <ArchitectureBanner
-          backendHealthy={backendHealthy}
-          checkingHealth={checkingHealth}
-        />
+        <section className="hero">
+          <div className="hero-inner">
+            <div className="hero-kicker">
+              <span className="hero-kicker-dot" />
+              Three-tier cloud architecture
+            </div>
+            <h1>Campus events, beautifully organized.</h1>
+            <p className="hero-lede">
+              Create, search, and manage workshops, hackathons, seminars, competitions,
+              and cultural events from one dashboard.
+            </p>
+            <div className="hero-meta">
+              <span className="hero-chip">Netlify · Presentation</span>
+              <span className="hero-chip">Render · API</span>
+              <span className="hero-chip">MongoDB Atlas · Data</span>
+            </div>
+            <ArchitectureBanner
+              backendHealthy={backendHealthy}
+              checkingHealth={checkingHealth}
+            />
+          </div>
+        </section>
 
+        <div className="section-label">
+          <h2>At a glance</h2>
+          <p>Live counts from the events collection</p>
+        </div>
         <EventStats stats={stats} />
 
+        <div className="section-label">
+          <h2>Manage events</h2>
+          <p>Search by id, title, venue, organizer, or category</p>
+        </div>
         <div className="action-bar">
           <div className="search-group">
             <div className="search-input-wrapper">
@@ -224,13 +250,11 @@ export default function App() {
       <Toast toasts={toasts} onDismiss={removeToast} />
 
       <footer className="app-footer">
-        <p>
-          Campus Event and Workshop Management System &bull; Three-Tier Cloud Architecture
-        </p>
+        <p>Campus Event Hub · Three-tier cloud architecture</p>
         <div className="footer-tags">
-          <span className="footer-tag">Netlify (Presentation)</span>
-          <span className="footer-tag">Render (Application / API)</span>
-          <span className="footer-tag">MongoDB Atlas (Database)</span>
+          <span className="footer-tag">Netlify · Presentation</span>
+          <span className="footer-tag">Render · Application</span>
+          <span className="footer-tag">MongoDB Atlas · Database</span>
         </div>
       </footer>
     </div>

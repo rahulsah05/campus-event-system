@@ -23,15 +23,19 @@ const statusClass = (status) => {
   return 'status-badge';
 };
 
+const categoryClass = (category) => {
+  const key = String(category || '').toLowerCase();
+  return `category-badge category-${key}`;
+};
+
 export default function EventTable({ events, loading, onEdit, onDelete }) {
   if (loading) {
     return (
       <div className="table-container">
         <div className="empty-state">
-          <div style={{ fontSize: '1.1rem', fontWeight: '600' }}>Loading event records...</div>
-          <p style={{ color: '#64748b', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-            Fetching data from Render API &amp; MongoDB Atlas
-          </p>
+          <div className="spinner" />
+          <h3>Loading campus events</h3>
+          <p>Fetching records from Render API and MongoDB Atlas</p>
         </div>
       </div>
     );
@@ -42,10 +46,10 @@ export default function EventTable({ events, loading, onEdit, onDelete }) {
       <div className="table-container">
         <div className="empty-state">
           <div className="empty-state-icon">
-            <CalendarOff size={48} />
+            <CalendarOff size={32} />
           </div>
-          <h3>No Event Records Found</h3>
-          <p>Click "Add Event" to create your first record, or clear your search filter.</p>
+          <h3>No events on the calendar</h3>
+          <p>Add a workshop, hackathon, or seminar to get started — or clear your search.</p>
         </div>
       </div>
     );
@@ -53,6 +57,12 @@ export default function EventTable({ events, loading, onEdit, onDelete }) {
 
   return (
     <div className="table-container">
+      <div className="table-toolbar">
+        <h3>Event records</h3>
+        <span className="table-count">
+          {events.length} {events.length === 1 ? 'event' : 'events'}
+        </span>
+      </div>
       <div style={{ overflowX: 'auto' }}>
         <table className="event-table">
           <thead>
@@ -74,22 +84,31 @@ export default function EventTable({ events, loading, onEdit, onDelete }) {
                 <td>
                   <span className="event-id-badge">{event.eventId}</span>
                 </td>
-                <td style={{ fontWeight: 600, color: '#0f172a' }}>{event.title}</td>
-                <td>{event.category}</td>
+                <td className="event-title-cell">
+                  {event.title}
+                  {event.description ? (
+                    <span className="event-desc">{event.description}</span>
+                  ) : null}
+                </td>
+                <td>
+                  <span className={categoryClass(event.category)}>{event.category}</span>
+                </td>
                 <td>{formatDate(event.date)}</td>
-                <td style={{ color: '#475569' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    <MapPin size={14} color="#94a3b8" />
+                <td>
+                  <div className="cell-with-icon">
+                    <MapPin size={14} />
                     <span>{event.venue}</span>
                   </div>
                 </td>
-                <td style={{ color: '#475569' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    <User size={14} color="#94a3b8" />
+                <td>
+                  <div className="cell-with-icon">
+                    <User size={14} />
                     <span>{event.organizer}</span>
                   </div>
                 </td>
-                <td>{event.capacity}</td>
+                <td>
+                  <span className="capacity-pill">{event.capacity}</span>
+                </td>
                 <td>
                   <span className={statusClass(event.status)}>{event.status}</span>
                 </td>

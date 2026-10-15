@@ -1,5 +1,5 @@
 import React from 'react';
-import { CalendarDays } from 'lucide-react';
+import { CalendarDays, RefreshCw } from 'lucide-react';
 
 export default function Header({ onRefresh, loading }) {
   return (
@@ -10,19 +10,20 @@ export default function Header({ onRefresh, loading }) {
             <CalendarDays size={24} />
           </div>
           <div>
-            <span className="brand-title">Campus Event and Workshop Management System</span>
-            <span className="brand-subtitle">Three-Tier Cloud Architecture (Netlify + Render + MongoDB Atlas)</span>
+            <span className="brand-title">Campus Event Hub</span>
+            <span className="brand-subtitle">Workshops · Hackathons · Seminars · Campus Life</span>
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+        <div className="header-actions">
           <button
             className="btn btn-secondary"
             onClick={onRefresh}
             disabled={loading}
             title="Refresh event records from database"
           >
-            {loading ? 'Refreshing...' : 'Refresh Data'}
+            <RefreshCw size={16} className={loading ? 'is-spinning' : undefined} />
+            {loading ? 'Refreshing...' : 'Refresh'}
           </button>
         </div>
       </div>

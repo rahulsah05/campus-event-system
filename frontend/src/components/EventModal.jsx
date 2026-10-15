@@ -103,7 +103,7 @@ export default function EventModal({ isOpen, onClose, onSave, eventToEdit }) {
       <div className="modal-card" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3 className="modal-title">
-            {isEditing ? `Edit Event: ${formData.eventId}` : 'Add New Event'}
+            {isEditing ? `Edit ${formData.eventId}` : 'Add a campus event'}
           </h3>
           <button className="modal-close" onClick={onClose}>
             <X size={20} />
@@ -112,21 +112,7 @@ export default function EventModal({ isOpen, onClose, onSave, eventToEdit }) {
 
         <form onSubmit={handleSubmit}>
           <div className="modal-body">
-            {error && (
-              <div
-                style={{
-                  background: '#fef2f2',
-                  border: '1px solid #fecaca',
-                  color: '#b91c1c',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '8px',
-                  marginBottom: '1rem',
-                  fontSize: '0.875rem'
-                }}
-              >
-                {error}
-              </div>
-            )}
+            {error && <div className="form-error">{error}</div>}
 
             <div className="form-grid">
               <div className="form-group">
