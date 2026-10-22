@@ -6,7 +6,7 @@ The MCP process is separate from Express, uses Streamable HTTP, and never connec
 
 - `frontend/` is the Vite/React Netlify site; `backend/` is the Express/Atlas API.
 - The existing API exposes `/health` and `/api/events` CRUD plus `/api/events/stats/summary`. Its health response now reports Mongoose connection state.
-- Git `origin` is `https://github.com/rahulsah05/campus-event-system`, branch `master`. Read access to that branch was verified. GitHub CLI is unavailable, so push/PR permissions were not verified.
+- Git `origin` is `https://github.com/rahulsah05/campus-event-system`, branch `master`. Read access and a non-mutating push dry run were verified. The verified feature branch `codex/mcp-oauth-deploy` contains commit `515412d`; its GitHub Actions `verify` job passed. `master` is currently unprotected. No PR was opened or merged.
 - `.github/workflows/verify.yml` runs backend syntax checks, MCP tests, and the frontend production build. There was no backend test script.
 - Netlify site ID/token, Netlify URL, existing Render service ID/token/URL, Atlas credentials, and an OAuth provider were not available here. Provider status tools report `not_configured` until the relevant secret and ID are set.
 
@@ -115,7 +115,7 @@ GitHub CI tests MCP tools against an isolated mock Express API, including OAuth 
 - OAuth user authorization protects MCP tools, but the existing Express CRUD API itself is publicly callable and has no authentication middleware. MCP OAuth does not secure direct calls to that API. Before treating production event writes as protected, separately secure the Express API and update the frontend to authenticate, or constrain API access through an approved network/API gateway. This needs an application auth design and must not be patched into production without review.
 - Secrets remain in the hosting provider's secret store; `.env.example` contains variable names only. Never commit `.env`.
 - `/health` is a liveness/readiness check, not a deploy-status claim. Provider state comes only from successful provider API calls.
-- No code push, PR, provider configuration change, or deployment has been performed. The user's live-test request is pending GitHub write/deploy approval plus staging/API and provider access. Do not test creates, updates, or deletes on production records.
+- Only the non-production feature branch above was committed and pushed, after checking remote write access. No PR was opened or merged, and no provider configuration or deployment was performed. The live-website/test-event request is pending account-side provider access and a confirmed staging API. Do not test creates, updates, or deletes on production records.
 
 ## Example prompts
 
