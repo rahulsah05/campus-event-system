@@ -1,0 +1,19 @@
+{
+  "name": "campus-event-mcp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Remote MCP service for the Campus Event System API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "jose": "^6.0.11",
+    "zod": "^4.6.7"
+  }
+}
