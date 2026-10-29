@@ -1,0 +1,40 @@
+# Optional Render Blueprint for the separate MCP service. Check the Render
+# workspace for an existing MCP service before creating/updating a Blueprint.
+services:
+  - type: web
+    name: campus-event-mcp
+    runtime: node
+    rootDir: mcp
+    plan: free
+    branch: master
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MCP_AUTH_MODE
+        value: oauth
+      - key: MCP_PUBLIC_URL
+        sync: false
+      - key: CAMPUS_API_URL
+        sync: false
+      - key: OAUTH_ISSUER
+        sync: false
+      - key: OAUTH_AUDIENCE
+        sync: false
+      - key: OAUTH_JWKS_URL
+        sync: false
+      - key: NETLIFY_ACCESS_TOKEN
+        sync: false
+      - key: NETLIFY_SITE_ID
+        sync: false
+      - key: NETLIFY_SITE_URL
+        sync: false
+      - key: RENDER_API_KEY
+        sync: false
+      - key: RENDER_BACKEND_SERVICE_ID
+        sync: false
+      - key: RENDER_MCP_SERVICE_ID
+        sync: false

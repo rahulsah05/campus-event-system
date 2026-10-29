@@ -198,3 +198,7 @@ CampusEventSystem/
 | Update event | Edit `EVT101` and change the status to `Ongoing`. | Atlas and the table both show the new status. Stats update. |
 | Delete event | Delete `EVT101` and confirm. | The event is removed from Atlas and the table. |
 | Database | Open the `events` collection in `campusEventDB`. | Documents match the changes made in the UI. |
+
+## MCP integration
+
+The separate MCP service, its tool permissions, Windows setup, remote hosting, client compatibility notes, and security guidance are documented in [mcp/README.md](mcp/README.md). It calls the existing backend API for event data and does not connect directly to MongoDB. GitHub source editing and Netlify/Render deployment controls are not configured in this checkout; see the MCP guide for the missing account-side setup.
